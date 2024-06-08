@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, Pressable, FlatList, Image } from 'react-native
 type Gatos = {
   id: string;
   url: string;
+  limit?: string;
 }
 
 export default function App() {
@@ -13,19 +14,17 @@ export default function App() {
   const [gatos, setGatos] = useState<Gatos[]>([]);
 
   const gerarGato = async () => {
-    const gato = await theCatAPI.images.searchImages({
+    const gatos = await theCatAPI.images.searchImages({
       limit: 5,
     });
 
-    setGatos(gato);
-
-    console.log(gato);
-    return gato;
+    setGatos(gatos);
+    console.log(gatos);
   }
 
   return (
     <View style={styles.container}>
-      <Text>Gerador de fotos de gatos</Text>
+      <Text style={styles.titulo}>Gerador de fotos de gatos</Text>
       <Pressable
         style={styles.button}
         onPress={gerarGato}
@@ -41,12 +40,11 @@ export default function App() {
         <View>
           <Image
             source={{ uri: gatos.item.url }}
-            style={{ width: '100%', height: 200 }}
+            style={styles.imagem}
           />
         </View>
         )}
       >
-
       </FlatList>
     </View>
   );
@@ -59,6 +57,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 40,
+  },
+
+  titulo: {
+    fontSize: 20,
+    marginBottom: 20,
   },
 
   button: {
@@ -79,6 +82,13 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderRadius: 4,
     width: '80%',
+    padding: 10,
+  },
+
+  imagem: {
+    width: "100%",
+    height: 200,
+    marginBottom: 10,
   }
 
 });
