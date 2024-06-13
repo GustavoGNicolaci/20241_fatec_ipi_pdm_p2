@@ -5,21 +5,25 @@ import { StyleSheet, Text, View, Pressable, FlatList, Image } from 'react-native
 type Gatos = {
   id: string;
   url: string;
-  limit?: string;
+  limit?: number;
 }
+const { API_KEY } = process.env;
 
 export default function App() {
-  const { API_KEY } = process.env;
-  const theCatAPI = new TheCatAPI(API_KEY || '');
+  const theCatAPI = `https://api.thecatapi.com/v1/images/search?api_key=${API_KEY}&limit=5`
   const [gatos, setGatos] = useState<Gatos[]>([]);
 
   const gerarGato = async () => {
-    const gatos = await theCatAPI.images.searchImages({
-      limit: 5,
-    });
+
+    const fotos = await fetch(theCatAPI);
+    const data = await fotos.json();
+    const gatos = data.slice(0, 5);
 
     setGatos(gatos);
+
     console.log(gatos);
+    console.log(theCatAPI)
+    
   }
 
   return (
